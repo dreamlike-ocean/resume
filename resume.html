@@ -272,13 +272,8 @@ header, .context-menu, .megamenu-content, footer { font-family: "Segoe UI", Aria
 <span>2，使用的框架为基于Netty的Vert.x，保证了无论是低配还是高配环境下面都能够获得很好的性能的前提下，将三种协议的对外API接口统一为响应式的</span>
 <span>3，通过使用EventLoop的reactor构型搭配串行无锁化编程思路实现了用少量线程支撑大量连接的效果，利用全套非阻塞API降低了线程数量，项目中除了文件IO操作外基本都是非阻塞操作，改善了原有bio内存占用率居高不下和cpu有效利用率低的问题，进而提高了系统响应速度，提高了系统连接的管理数量上限</span>
 <span>项目源码</span><a href="https://github.com/dreamlike-ocean/drone_backend" target="_blank" class="url">https://github.com/dreamlike-ocean/drone_backend</a><span>。</span></p><p>&nbsp;</p></li>
-  <li><p><strong><span>基于IO_Uring的Java异步IO库</span></strong></p>
- <span>1，通过使用Panama引入的新的FFI接口对liburing做绑定，所有操作均是通过Java代码进行操作，无需理解c相关知识，同时保证了内存安全</span>
-<span>2，提供开箱即用的socket与file IO的异步封装，包含基础的read/write原语，支持IOSQE_BUFFER_SELECT的read以及支持IOSQE_IO_LINK特性</span>
-<span>3，除了日志门面之外可以做到0外部依赖</span>
-<span>4，同时支持proactor模式和reactor模式，通过eventfd实现了复用已有EpollEventLoop的能力</span>
-  <span>项目源码</span><a href="https://github.com/dreamlike-ocean/PanamaUring" target="_blank" class="url">PanamaUring</a><span>。</span><p>&nbsp;</p></li></p><p>&nbsp;</p></li>
-  <li><p><strong><span>非阻塞网络库开发</span></strong></p><p><span>1，基于Eventloop模型做到了读写串行化，尽可能减少了锁的开销，实现了消息驱动的socket读写和基于最小堆的定时器</span>
+ <li><p><strong><span>基于IO_Uring的Java异步IO库</span></strong></p><p><span>1，通过使用Panama引入的新的FFI接口对liburing做绑定，所有操作均是通过Java代码进行操作，无需理解c相关知识，同时利用RAII保证了内存安全</span></p><p><span> 2，提供开箱即用的socket与file IO的异步封装，包含基础的read/write原语，支持IOSQE_BUFFER_SELECT的read以及支持IOSQE_IO_LINK特性 </span></p><p><span>3，除了日志门面之外可以做到0外部依赖 </span></p><p><span>4，同时支持proactor模式和reactor模式，通过eventfd实现了复用已有EpollEventLoop的能力</span></p><p><span>项目源码</span><a href='https://github.com/dreamlike-ocean/PanamaUring'><span>PanamaUring</span></a></p><p>&nbsp;</p></li>
+ <li><p><strong><span>非阻塞网络库开发</span></strong></p><p><span>1，基于Eventloop模型做到了读写串行化，尽可能减少了锁的开销，实现了消息驱动的socket读写和基于最小堆的定时器</span>
 <span>2，实现了三级内存池，降低每次都需要获取堆外内存的开销，Eventloop线程优先从本线程私有的分配器分配池化内存，若不足再去全局公有的分配器分配内存，再不足则分配非池化内存，同样允许设置最大和最小内存池上限保证大小可控</span>
 <span>3，仿照netty的pipeline实现了无锁化的线程安全可插拔handler</span>
 <span>4，只依赖与jdk系统库标准API，不依赖于反射,无额外第三方依赖，对jdk升级和native-image友好</span>
