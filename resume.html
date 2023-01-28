@@ -268,10 +268,12 @@ header, .context-menu, .megamenu-content, footer { font-family: "Segoe UI", Aria
   <span>日常工作为参与SaaS化的与飞书集成的差旅费控的维护和开发,曾利用字节内部的BCP工具进行数据一致性检查和修补,其本质是利用golang作为runtime的faas和利用binlog监听机制核对多个数据源的的最终一致性</span>
 </p></li>
 
-</ul><h2><a name="%3Cimg-src=%22assets/project-diagram-solid.svg%22-width=%2230px%22%3E-%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86" class="md-header-anchor"></a><img src="./resume_files/project-diagram-solid.svg" width="30px"><span> 项目经历</span></h2><ul><li><p><strong><span>基于Vertx异步库的无人车系统后端开发</span></strong></p><p><span>1，项目涉及到Http协议，Websocket协议和自定义的TCP协议</span>
-<span>2，使用的框架为基于Netty的Vert.x，保证了无论是低配还是高配环境下面都能够获得很好的性能的前提下，将三种协议的对外API接口统一为响应式的</span>
-<span>3，通过使用EventLoop的reactor构型搭配串行无锁化编程思路实现了用少量线程支撑大量连接的效果，利用全套非阻塞API降低了线程数量，项目中除了文件IO操作外基本都是非阻塞操作，改善了原有bio内存占用率居高不下和cpu有效利用率低的问题，进而提高了系统响应速度，提高了系统连接的管理数量上限</span>
-<span>项目源码</span><a href="https://github.com/dreamlike-ocean/drone_backend" target="_blank" class="url">https://github.com/dreamlike-ocean/drone_backend</a><span>。</span></p><p>&nbsp;</p></li>
+</ul><h2><a name="%3Cimg-src=%22assets/project-diagram-solid.svg%22-width=%2230px%22%3E-%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86" class="md-header-anchor"></a><img src="./resume_files/project-diagram-solid.svg" width="30px"><span> 项目经历</span></h2><ul>
+  <li><p>基于Vertx异步库的无人车系统后端开发**</p>
+<p>1，项目涉及到Http协议，Websocket协议和自定义的TCP协议。其中Http协议用于用户下单等订单交互操作，自定义TCP协议用于与无人车指令交互，WebSocket协议用于推送订单给站点以及转换站点的指令下达给无人车。</p>
+<p> 2，使用的框架为基于Netty的Vert.x，订单部分和站点通讯不能使用Vert.x web，reactive mysql client等组件支持全链路的异步，无人车通讯部分使用Netty API完成协议解析和指令上传下达的操作，三个模块底层公用同一组EventLoop，极大减少了线程切换成本，同时做到了绑定核心操作，cache亲和性好。</p>
+<p>3，通过使用EventLoop的reactor构型搭配串行无锁化编程思路实现了用少量线程支撑大量连接的效果，利用全套非阻塞API降低了线程数量，项目中除了文件IO操作外基本都是非阻塞操作，改善了原有bio内存占用率居高不下和cpu有效利用率低的问题，进而提高了系统资源利用率，在1c1g的限制下支持单个校园的服务只占用80mb，cpu占用低</p>
+<p> 项目源码<a href='https://github.com/dreamlike-ocean/drone_backend' target='_blank' class='url'>https://github.com/dreamlike-ocean/drone_backend</a>。</p>。</span></p><p>&nbsp;</p></li>
  <li><p><strong><span>基于IO_Uring的Java异步IO库</span></strong></p><p><span>1，通过使用Panama引入的新的FFI接口对liburing做绑定，所有操作均是通过Java代码进行操作，无需理解c相关知识，同时利用RAII保证了内存安全</span></p><p><span> 2，提供开箱即用的socket与file IO的异步封装，包含基础的read/write原语，支持IOSQE_BUFFER_SELECT的read以及支持IOSQE_IO_LINK特性 </span></p><p><span>3，除了日志门面之外可以做到0外部依赖 </span></p><p><span>4，同时支持proactor模式和reactor模式，通过eventfd实现了复用已有EpollEventLoop的能力</span></p><p><span>项目源码</span><a href='https://github.com/dreamlike-ocean/PanamaUring'><span>PanamaUring</span></a></p><p>&nbsp;</p></li>
  <li><p><strong><span>非阻塞网络库开发</span></strong></p><p><span>1，基于Eventloop模型做到了读写串行化，尽可能减少了锁的开销，实现了消息驱动的socket读写和基于最小堆的定时器</span>
 <span>2，实现了三级内存池，降低每次都需要获取堆外内存的开销，Eventloop线程优先从本线程私有的分配器分配池化内存，若不足再去全局公有的分配器分配内存，再不足则分配非池化内存，同样允许设置最大和最小内存池上限保证大小可控</span>
