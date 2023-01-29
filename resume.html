@@ -271,7 +271,7 @@ header, .context-menu, .megamenu-content, footer { font-family: "Segoe UI", Aria
 </ul><h2><a name="%3Cimg-src=%22assets/project-diagram-solid.svg%22-width=%2230px%22%3E-%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86" class="md-header-anchor"></a><img src="./resume_files/project-diagram-solid.svg" width="30px"><span> 项目经历</span></h2><ul>
   <li><p><strong><span>基于Vertx异步库的无人车系统后端开发</span></strong>
 <span>1，项目涉及到Http协议，Websocket协议和自定义的TCP协议。其中Http协议用于用户下单等订单交互操作，自定义TCP协议用于与无人车指令交互，WebSocket协议用于推送订单给站点以及转换站点的指令下达给无人车。</span>
-<span>2，使用的框架为基于Netty的Vert.x，订单部分和站点通讯不能使用Vert.x web，reactive mysql client等组件支持全链路的异步，无人车通讯部分使用Netty API完成协议解析和指令上传下达的操作，三个模块底层公用同一组EventLoop，极大减少了线程切换成本，同时做到了绑定核心操作，cache亲和性好。</span>
+<span>2，使用的框架为基于Netty的Vert.x，订单部分和站点通讯部分用Vert.x web，reactive mysql client等组件支持全链路的异步的订单流转和储存，无人车通讯部分使用Netty API完成协议解析和指令上传下达的操作，三个模块底层公用同一组EventLoop，极大减少了线程切换成本，同时做到了绑定核心操作，cache亲和性好。</span>
 <span>3，通过使用EventLoop的reactor构型搭配串行无锁化编程思路实现了用少量线程支撑大量连接的效果，利用全套非阻塞API降低了线程数量，项目中除了文件IO操作外基本都是非阻塞操作，改善了原有bio内存占用率居高不下和cpu有效利用率低的问题，进而提高了系统资源利用率，在1c1g的限制下支持单个校园的服务只占用80mb，且运行时cpu占用低</span>
 <span>项目源码<a href='https://github.com/dreamlike-ocean/drone_backend' target='_blank' class='url'>https://github.com/dreamlike-ocean/drone_backend</a></span>
 </p></li>
