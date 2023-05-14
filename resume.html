@@ -276,11 +276,6 @@ header, .context-menu, .megamenu-content, footer { font-family: "Segoe UI", Aria
 <span>项目源码<a href='https://github.com/dreamlike-ocean/drone_backend' target='_blank' class='url'>https://github.com/dreamlike-ocean/drone_backend</a></span>
 </p></li>
 <li><p><strong><span>基于IO_Uring的Java异步IO库</span></strong></p><p><span>1，通过使用Panama引入的新的FFI接口对liburing做绑定，所有操作均是通过Java代码进行操作，无需理解c相关知识，同时利用RAII保证了内存安全</span></p><p><span> 2，提供开箱即用的socket与file IO的异步封装，包含基础的read/write原语，支持IOSQE_BUFFER_SELECT的read以及支持IOSQE_IO_LINK特性 </span></p><p><span>3，除了日志门面之外可以做到0外部依赖 </span></p><p><span>4，同时支持proactor模式和reactor模式，通过eventfd实现了复用已有EpollEventLoop的能力</span></p> <span>项目源码</span><a href='https://github.com/dreamlike-ocean/PanamaUring'><span>https://github.com/dreamlike-ocean/PanamaUring</span></a></li>
- <li><p><strong><span>非阻塞网络库开发</span></strong></p><p><span>1，基于Eventloop模型做到了读写串行化，尽可能减少了锁的开销，实现了消息驱动的socket读写和基于最小堆的定时器</span>
-<span>2，实现了三级内存池，降低每次都需要获取堆外内存的开销，Eventloop线程优先从本线程私有的分配器分配池化内存，若不足再去全局公有的分配器分配内存，再不足则分配非池化内存，同样允许设置最大和最小内存池上限保证大小可控</span>
-<span>3，仿照netty的pipeline实现了无锁化的线程安全可插拔handler</span>
-<span>4，只依赖与jdk系统库标准API，不依赖于反射,无额外第三方依赖，对jdk升级和native-image友好</span>
-<span>项目源码</span><a href="https://github.com/dreamlike-ocean/oceanet" target="_blank" class="url">https://github.com/dreamlike-ocean/oceanet</a></p></li>
 <li><p><strong><span>RaftKV</span></strong>
 <span>1，使用vertx作为网络层驱动，实现了简单的基于raft共识的线性一致性读的KV储存</span>
 <span>2，raft peer之间的通讯利用非阻塞io搭配单线程调度，使得raft一些操作无需加锁</span>
