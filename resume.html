@@ -318,25 +318,29 @@ header, .context-menu, .megamenu-content, footer { font-family: "Segoe UI", Aria
         <img src="./resume_files/project-diagram-solid.svg" width="30px">
         <span>项目经历</span>
     </h2>
+        <strong><span>管报数据调整平台重构</span></strong>
+        </br>
+        背景：该平台由低代码平台实现，用于承接集团管财数据的集成和调整以及推送，是集团管报的核心服务，随着业务发展低代码平台性能不足以支持业务诉求，需要重构
+        <ul>
+            <li>通过手写DAG实现，编排上游数仓的调度任务，提供协作式任务取消，长时间任务监控，以及任务状态实时汇报的功能</li>
+            <li>通过perf发现了业务处理的off-cpu维度的耗时性能问题，考虑由于业务特性维度数据不经常更新，所以基于进程缓存和MQ广播消息实现了维度数据缓存，加速了业务处理的速度。获得了万行数据调整从15min减少到1min的优化结果</li>
+            <li>通过使用多线程和Reactive DB Client的方案，在数据库负载允许的能力下，使用少量线程加快了数据的推送速度，相比旧平台20min的推送速度，新平台仅需5min</li>
+            <li>引入HTAP相关技术，改善原有基于OLTP查询的性能，在600w底表的即席查询情况下，将查询速度从分钟级别降低到秒级别，同时也在探索使用物化视图的方案切换到纯OLAP查询</li>
+        </ul>
+
+
+    <strong><span>基于io_uring的Java异步IO库</span></strong>
+    </br>
+    背景：在参与某个KV数据库训练时，发现Java标准库的DirectIO和AIO支持较差，且需要消耗额外的线程进行处理，同时发现未有Java的io_uring的实现，所以决定开发一个io_uring的Java异步IO库
     <ul>
-        <
-        <strong><span>管报数据修正平台重构</span></strong>
-        <strong>背景：</strong>
-        </li>
-
-
-        <li><p><strong><span>基于IO_Uring的Java异步IO库</span></strong></p>
-            <p>
-                <span>1，通过使用Panama引入的新的FFI接口对liburing做绑定，所有操作均是通过Java代码进行操作，无需理解c相关知识，同时利用RAII保证了内存安全</span>
-            </p>
-            <p><span> 2，提供开箱即用的socket与file IO的异步封装，包含基础的read/write原语，支持IOSQE_BUFFER_SELECT的read以及支持IOSQE_IO_LINK特性 </span>
-            </p>
-            <p><span>3，除了日志门面之外可以做到0外部依赖 </span></p>
-            <p><span>4，同时支持proactor模式和reactor模式，通过eventfd实现了复用已有EpollEventLoop的能力</span></p> <span>项目源码</span><a
-                    href='https://github.com/dreamlike-ocean/PanamaUring'><span>https://github.com/dreamlike-ocean/PanamaUring</span></a>
-        </li>
-
+        <li>通过JEP454 引入的FFI API，实现pure Java的io_uring绑定，在参数填充，CQE收割的热路径上，无Native切换开销</li>
+        <li>提供与posix api对位的异步IO API，从文件IO到网络IO,以及部分诸如EventFd，pipeFd的io_uring封装</li>
+        <li>经过monoio的启发，引入所有权概念以及使用Thread-per-core的EventLoop设计，构建了无额外拷贝，且内存安全无竞态的异步IO API</li>
+        <li>支持诸如Multi-shot，Provided buffers，IoUringBufferRing，Selected Buffer Read等特性，以及针对单线程io_uring的IORING_SETUP_SINGLE_ISSUER优化特性</li>
+        <li>额外实现了基于APT/Reflection，以及字节码库等元编程工具，实现了声明式的FFI和FFM绑定，通过invokedyamic和methodhandle api实现了惰性绑定和接近于手写绑定的峰值性能</li>
+        <li>项目地址：https://github.com/dreamlike-ocean/PanamaUring</li>
     </ul>
+
 
 </div>
 
